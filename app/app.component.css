@@ -1,0 +1,8 @@
+.flappyBird{
+    height: 5vh;
+    width: 5vh;
+    background-color: green;
+    position: fixed;
+    left: 50vw;
+    top: 50%;
+}

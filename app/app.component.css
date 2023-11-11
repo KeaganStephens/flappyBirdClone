@@ -6,3 +6,27 @@
     left: 50vw;
     top: 50%;
 }
+
+#container{
+    border: red 1px solid;
+    height: 100%;
+    width: 100%;
+}
+
+#upperPillar{
+    height: 50vh;
+    width: 20vw;
+    background-color: red;
+    position: fixed;
+    left: 80%;
+    top: 0;
+}
+
+#lowerPillar{
+    height: 30vh;
+    width: 20vw;
+    background-color: rgb(87, 42, 42);
+    position: fixed;
+    left: 80%;
+    top: 70%;
+}

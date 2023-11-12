@@ -63,30 +63,41 @@ export class AppComponent implements OnInit {
     let upperPillar = 'upperPillar' + currentPillar
     let lowerPillar = 'lowerPillar' + currentPillar
 
+    console.log(upperPillar)
     setTimeout( () => {
-       
-      do{
-        this.pillarTop = document.getElementById(upperPillar)
-        this.pillarBottom = document.getElementById(lowerPillar)
-        this.pillarStart = this.pillarBottom?.offsetLeft
-        // console.log('#p' + this.pillarStart)
-      }while(this.pillarBottom == undefined || this.pillarTop == undefined || this.pillarStart == undefined)
+
+      // this.pillarTop = document.getElementById(upperPillar)
+      // this.pillarBottom = document.getElementById(lowerPillar)
+      // this.pillarStart = this.pillarBottom?.offsetLeft
+
+      let pillarAbove = document.getElementById(upperPillar)
+      let pillarBelow = document.getElementById(lowerPillar)
+      let pillarPosition = pillarBelow?.offsetLeft
+
+      while(pillarAbove == undefined || pillarBelow == undefined || pillarPosition == undefined){
+        pillarAbove = document.getElementById(upperPillar)
+        pillarBelow = document.getElementById(lowerPillar)
+        pillarPosition = this.pillarBottom?.offsetLeft
+        console.log("loop")
+      }
 
       // console.log(this.pillarBottom)
       // console.log(this.viewportHeight  - this.birdHeight - this.moveDownDistance)
       console.log("----")
-      if(this.pillarBottom != undefined && this.pillarTop!= undefined && this.pillarStart != undefined){
+      if(pillarBelow != undefined && pillarAbove != undefined && pillarPosition != undefined){
         // console.log(this.birdStart)
-        this.pillarTop.style.left = (this.pillarStart - this.pillarMoveLeft) + 'px'
-        this.pillarBottom.style.left = (this.pillarStart - this.pillarMoveLeft) + 'px'
-        console.log("----" + this.pillarBottom.style.right)
+        pillarAbove.style.left = (pillarPosition- this.pillarMoveLeft) + 'px'
+        pillarBelow.style.left = (pillarPosition - this.pillarMoveLeft) + 'px'
+        console.log("----" + pillarBelow.style.right)
         // console.log('#p' + this.pillarStart)
-        this.pillarStart -= this.pillarMoveLeft
-        if(this.pillarStart >= furthersPoint ){
+        pillarPosition -= this.pillarMoveLeft
+        if(pillarPosition >= furthersPoint ){
           this.pillarsMoving(1, furthersPoint, currentPillar)
         }else{
-          this.pillarSpawn.push(0)
-          this.pillarsMoving(1, furthersPoint, currentPillar++)
+          this.pillarSpawn.push(++currentPillar);
+          console.log(currentPillar);
+          this.pillarsMoving(1, furthersPoint, currentPillar)
+          
         }
       }else{
         console.log('umm')

@@ -13,7 +13,7 @@
     width: 100%;
 }
 
-#upperPillar{
+.upperPillar{
     height: 50vh;
     width: 20vw;
     background-color: red;
@@ -22,7 +22,7 @@
     top: 0;
 }
 
-#lowerPillar{
+.lowerPillar{
     height: 30vh;
     width: 20vw;
     background-color: rgb(87, 42, 42);

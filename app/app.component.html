@@ -1,5 +1,7 @@
 <div id="container">
   <div class="flappyBird" id="flappyBird"></div>
+  <ng-container *ngFor="let index of pillarSpawn"> 
+    <div  id="upperPillar{{index}}" class="upperPillar"></div>
+    <div  id="lowerPillar{{index}}"  class="lowerPillar"></div>
+  </ng-container>
 </div>
-<div  id="upperPillar"></div>
-<div  id="lowerPillar"></div>

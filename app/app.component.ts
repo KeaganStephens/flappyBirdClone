@@ -58,11 +58,15 @@ export class AppComponent implements OnInit {
     }
   }
 
+  // getPillarInfo(id : string ,upper){
+
+  // }
+
   pillarsMoving(adjust : number, furthersPoint : number, currentPillar : number){
 
     let upperPillar = 'upperPillar' + currentPillar
     let lowerPillar = 'lowerPillar' + currentPillar
-
+    
     console.log(upperPillar)
     setTimeout( () => {
 
@@ -73,6 +77,9 @@ export class AppComponent implements OnInit {
       let pillarAbove = document.getElementById(upperPillar)
       let pillarBelow = document.getElementById(lowerPillar)
       let pillarPosition = pillarBelow?.offsetLeft
+      let pillarWidth = pillarAbove?.clientWidth
+
+      console.log(pillarWidth)
 
       while(pillarAbove == undefined || pillarBelow == undefined || pillarPosition == undefined){
         pillarAbove = document.getElementById(upperPillar)
@@ -84,19 +91,27 @@ export class AppComponent implements OnInit {
       // console.log(this.pillarBottom)
       // console.log(this.viewportHeight  - this.birdHeight - this.moveDownDistance)
       console.log("----")
-      if(pillarBelow != undefined && pillarAbove != undefined && pillarPosition != undefined){
+      if(pillarBelow != undefined && pillarAbove != undefined && pillarPosition != undefined && pillarWidth != undefined){
         // console.log(this.birdStart)
         pillarAbove.style.left = (pillarPosition- this.pillarMoveLeft) + 'px'
         pillarBelow.style.left = (pillarPosition - this.pillarMoveLeft) + 'px'
         console.log("----" + pillarBelow.style.right)
         // console.log('#p' + this.pillarStart)
         pillarPosition -= this.pillarMoveLeft
-        if(pillarPosition >= furthersPoint ){
-          this.pillarsMoving(1, furthersPoint, currentPillar)
-        }else{
-          this.pillarSpawn.push(++currentPillar);
+
+        if(pillarPosition == 70){
+          let newPillar = currentPillar + 1
+          this.pillarSpawn.push(newPillar);
           console.log(currentPillar);
-          this.pillarsMoving(1, furthersPoint, currentPillar)
+          this.pillarsMoving(1, furthersPoint, newPillar)
+        }
+
+        if(pillarPosition >= furthersPoint - pillarWidth){
+          this.pillarsMoving(1, furthersPoint - pillarWidth, currentPillar)
+        }else{
+          // this.pillarSpawn.push(++currentPillar);
+          // console.log(currentPillar);
+          // this.pillarsMoving(1, furthersPoint, currentPillar)
           
         }
       }else{

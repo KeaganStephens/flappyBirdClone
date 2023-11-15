@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Pillar } from 'src/bird.model';
 
 @Component({
   selector: 'app-root',
@@ -6,7 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'flappyBirdClone';
+
+  constructor(
+    private pillar : Pillar
+  ){}
+
+  pillarSpawn : Pillar[] = []
 
   bird = document.getElementById('flappyBird')
   birdStart = this.bird?.offsetTop
@@ -121,9 +127,18 @@ export class AppComponent implements OnInit {
       ,10 * adjust)
   }
 
-  pillarSpawn = [0]
+  getPillarId(pillarId : Pillar[]){
+    let pillarIdLength = pillarId.length
+    if ( pillarIdLength > 0){
+      return pillarId[pillarIdLength - 1].id + 1
+    }else{
+      return 0 
+    }
+    
+  }
 
   ngOnInit(){
+    this.pillarSpawn.push(new Pillar(this.getPillarId(this.pillarSpawn),'upperPillar0', 'lowerPillar)', 0, 0, 0))
     let container = document.getElementById('container')
 
     this.birdFalling(1, this.viewportHeight)

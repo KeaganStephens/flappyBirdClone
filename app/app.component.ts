@@ -8,11 +8,10 @@ import { Pillar } from 'src/bird.model';
 })
 export class AppComponent implements OnInit {
 
-  constructor(
-    private pillar : Pillar
-  ){}
+  title = 'flappyBirdClone';
 
-  pillarSpawn : Pillar[] = []
+  pillarSpawn = [0]
+  newPillarSpawn : Pillar[] = []
 
   bird = document.getElementById('flappyBird')
   birdStart = this.bird?.offsetTop
@@ -24,6 +23,7 @@ export class AppComponent implements OnInit {
   moveUpDistance = 50
   pillarMoveLeft = 1
   pillarStart = this.pillarBottom?.offsetLeft
+  totalHeightOfPillar = 80 
 
   birdFalling(adjust : number, lowestPoint : number){
 
@@ -64,61 +64,70 @@ export class AppComponent implements OnInit {
     }
   }
 
-  // getPillarInfo(id : string ,upper){
+  getPillarElementInfo(id : number){
 
-  // }
+    let upperPillar = 'upperPillar' + id
+    let lowerPillar = 'lowerPillar' + id
 
-  pillarsMoving(adjust : number, furthersPoint : number, currentPillar : number){
+    let pillarAbove = document.getElementById(upperPillar)
+    let pillarBelow = document.getElementById(lowerPillar)
+    let pillarPosition = pillarBelow?.offsetLeft
+    let pillarWidth = pillarAbove?.clientWidth
 
-    let upperPillar = 'upperPillar' + currentPillar
-    let lowerPillar = 'lowerPillar' + currentPillar
-    
-    console.log(upperPillar)
-    setTimeout( () => {
+    // console.log(pillarWidth)
 
-      // this.pillarTop = document.getElementById(upperPillar)
-      // this.pillarBottom = document.getElementById(lowerPillar)
-      // this.pillarStart = this.pillarBottom?.offsetLeft
-
-      let pillarAbove = document.getElementById(upperPillar)
-      let pillarBelow = document.getElementById(lowerPillar)
-      let pillarPosition = pillarBelow?.offsetLeft
+    while(pillarAbove == undefined || pillarBelow == undefined || pillarPosition == undefined || pillarWidth == undefined){
+      pillarAbove = document.getElementById(upperPillar)
+      pillarBelow = document.getElementById(lowerPillar)
+      pillarPosition = this.pillarBottom?.offsetLeft
       let pillarWidth = pillarAbove?.clientWidth
+      console.log("loop" + id)
+    }
+    
+    return {
+      above: pillarAbove , 
+      below : pillarBelow , 
+      position : pillarPosition, 
+      Width : pillarWidth
+    }
+    
+  }
 
-      console.log(pillarWidth)
+  pillarsMoving(adjust : number, furthersPoint : number, id : number , changeHeight : boolean){
 
-      while(pillarAbove == undefined || pillarBelow == undefined || pillarPosition == undefined){
-        pillarAbove = document.getElementById(upperPillar)
-        pillarBelow = document.getElementById(lowerPillar)
-        pillarPosition = this.pillarBottom?.offsetLeft
-        console.log("loop")
-      }
+    setTimeout( () => {
+     
+      let pillar = this.getPillarElementInfo(id)
+      if(changeHeight){
+        let randNum =  this.totalHeightOfPillar * Math.random();
+        pillar.above.style.height = randNum + "vh"
+        pillar.below.style.height = (this.totalHeightOfPillar - randNum )+ "vh"
+        changeHeight = !changeHeight
+      } 
+      
+      if(pillar.below != undefined && pillar.above != undefined && pillar.position!= undefined && pillar.Width != undefined){
+        
+        pillar.above.style.left = (pillar.position - this.pillarMoveLeft) + 'px'
+        pillar.below.style.left = (pillar.position - this.pillarMoveLeft) + 'px'
+    
+        pillar.position -= this.pillarMoveLeft
 
-      // console.log(this.pillarBottom)
-      // console.log(this.viewportHeight  - this.birdHeight - this.moveDownDistance)
-      console.log("----")
-      if(pillarBelow != undefined && pillarAbove != undefined && pillarPosition != undefined && pillarWidth != undefined){
-        // console.log(this.birdStart)
-        pillarAbove.style.left = (pillarPosition- this.pillarMoveLeft) + 'px'
-        pillarBelow.style.left = (pillarPosition - this.pillarMoveLeft) + 'px'
-        console.log("----" + pillarBelow.style.right)
-        // console.log('#p' + this.pillarStart)
-        pillarPosition -= this.pillarMoveLeft
-
-        if(pillarPosition == 70){
-          let newPillar = currentPillar + 1
+        if(pillar.position == 70){
+          let newPillar = id + 1
           this.pillarSpawn.push(newPillar);
-          console.log(currentPillar);
-          this.pillarsMoving(1, furthersPoint, newPillar)
+          
+          // let tempPillarInfo = this.getPillarElementInfo(newPillar)
+          // let randNum =  this.totalHeightOfPillar * Math.random();
+          // tempPillarInfo.above.style.height = randNum + "vh"
+          // tempPillarInfo.below.style.height = (this.totalHeightOfPillar - randNum )+ "vh"
+          console.log(id);
+          this.pillarsMoving(1, furthersPoint, newPillar, true)
         }
 
-        if(pillarPosition >= furthersPoint - pillarWidth){
-          this.pillarsMoving(1, furthersPoint - pillarWidth, currentPillar)
+        if(pillar.position >= furthersPoint - pillar.Width){
+          this.pillarsMoving(1, furthersPoint , id, changeHeight)
         }else{
-          // this.pillarSpawn.push(++currentPillar);
-          // console.log(currentPillar);
-          // this.pillarsMoving(1, furthersPoint, currentPillar)
-          
+          this.pillarSpawn.splice(0, 1)
         }
       }else{
         console.log('umm')
@@ -127,22 +136,13 @@ export class AppComponent implements OnInit {
       ,10 * adjust)
   }
 
-  getPillarId(pillarId : Pillar[]){
-    let pillarIdLength = pillarId.length
-    if ( pillarIdLength > 0){
-      return pillarId[pillarIdLength - 1].id + 1
-    }else{
-      return 0 
-    }
-    
-  }
-
+  
   ngOnInit(){
-    this.pillarSpawn.push(new Pillar(this.getPillarId(this.pillarSpawn),'upperPillar0', 'lowerPillar)', 0, 0, 0))
+    console.log(this.totalHeightOfPillar)
     let container = document.getElementById('container')
 
     this.birdFalling(1, this.viewportHeight)
-    this.pillarsMoving(1, 0, 0)
+    this.pillarsMoving(1, 0, 0, true)
     console.log(this.viewportHeight)
     while(this.bird == undefined){
       this.bird = document.getElementById('flappyBird')
@@ -155,3 +155,5 @@ export class AppComponent implements OnInit {
 
   
 }
+
+

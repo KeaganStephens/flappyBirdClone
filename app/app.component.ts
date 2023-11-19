@@ -15,27 +15,35 @@ export class AppComponent implements OnInit {
 
   bird = document.getElementById('flappyBird')
   birdStart = this.bird?.offsetTop
-  pillarTop = document.getElementById('upperPillar')
-  pillarBottom = document.getElementById('lowerPillar')
+  // pillarTop = document.getElementById('upperPillar')
+  // pillarBottom = document.getElementById('lowerPillar')
   viewportHeight = window.innerHeight
+
   birdHeight = this.bird?.clientHeight
+  birdWidth = this.bird?.clientWidth
+  birdLeft = this.bird?.offsetLeft
+
   moveDownDistance = 1
   moveUpDistance = 50
   pillarMoveLeft = 1
-  pillarStart = this.pillarBottom?.offsetLeft
+  // pillarStart = this.pillarBottom?.offsetLeft
   totalHeightOfPillar = 80 
 
   birdFalling(adjust : number, lowestPoint : number){
 
     setTimeout( () => {
        
-      while(this.birdStart == undefined || this.bird == undefined || this.birdHeight == undefined ){
+      while(this.birdStart == undefined || this.bird == undefined || this.birdHeight == undefined || this.birdWidth == undefined || this.birdLeft == undefined){
         this.bird = document.getElementById('flappyBird')
         this.birdStart = this.bird?.offsetTop
         this.birdHeight = this.bird?.clientHeight
+        this.birdWidth = this.bird?.clientWidth
+        this.birdLeft = this.bird?.offsetLeft
       }
 
-      // console.log(this.birdHeight)
+      console.log("heightBird: "+ this.birdHeight)
+      console.log("widthBird: "+ this.birdWidth)
+      console.log("leftBird: "+ this.birdLeft)
       // console.log(this.viewportHeight  - this.birdHeight - this.moveDownDistance)
       // console.log("----")
       if(this.birdStart != undefined && this.bird != undefined){
@@ -79,7 +87,7 @@ export class AppComponent implements OnInit {
     while(pillarAbove == undefined || pillarBelow == undefined || pillarPosition == undefined || pillarWidth == undefined){
       pillarAbove = document.getElementById(upperPillar)
       pillarBelow = document.getElementById(lowerPillar)
-      pillarPosition = this.pillarBottom?.offsetLeft
+      // pillarPosition = this.pillarBottom?.offsetLeft
       let pillarWidth = pillarAbove?.clientWidth
       console.log("loop" + id)
     }
